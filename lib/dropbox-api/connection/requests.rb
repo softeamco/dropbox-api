@@ -8,7 +8,7 @@ module Dropbox
         def request(options = {})
           response = yield
           raise Dropbox::API::Error::ConnectionFailed if !response
-          status = response.code.to_i
+          status = (response.respond_to?(:code) ? response.code : response.status).to_i
           case status
             when 400
               parsed = MultiJson.decode(response.body)
