@@ -44,10 +44,11 @@ module Dropbox
         Dropbox::API::Object.convert(results, self)
       end
 
-      def delta(cursor=nil)
+      def delta(cursor=nil, path_prefix=nil)
         entries  = []
         has_more = true
         params   = cursor ? {:cursor => cursor} : {}
+        params.merge({path_prefix: path_prefix}) if path_prefix.present?
         while has_more
           response        = raw.delta(params)
           params[:cursor] = response['cursor']
